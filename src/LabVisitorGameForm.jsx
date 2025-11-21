@@ -1,0 +1,414 @@
+import React, { useState, useMemo } from "react";
+import logo from "./assets/logo.png"
+
+const TUJUAN_OPTIONS = [
+  { value: "kunjungan-lab", label: "Kunjungan Laboratorium" },
+  { value: "kolaborasi-riset", label: "Kolaborasi / Riset Bersama" },
+  { value: "magang", label: "Magang / Kerja Praktik" },
+  { value: "peminjaman-alat", label: "Peminjaman Alat / Fasilitas" },
+  { value: "bimbingan", label: "Bimbingan / Konsultasi" },
+  { value: "lainnya", label: "Lainnya (Other)" },
+];
+
+export default function LabVisitorGameForm() {
+  const [formData, setFormData] = useState({
+    nama: "",
+    instansi: "",
+    kontak: "",
+    picLab: "",
+    tujuan: "",
+    tujuanCustom: "",
+  });
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const completedSteps = useMemo(() => {
+    let count = 0;
+    if (formData.nama.trim()) count++;
+    if (formData.instansi.trim()) count++;
+    if (formData.kontak.trim()) count++;
+    if (formData.picLab.trim()) count++;
+
+    if (formData.tujuan === "lainnya") {
+      if (formData.tujuanCustom.trim()) count++;
+    } else if (formData.tujuan) {
+      count++;
+    }
+
+    return count;
+  }, [formData]);
+
+  const totalSteps = 5;
+  const progress = (completedSteps / totalSteps) * 100;
+
+  const handleChange = (field) => (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setSubmitted(false);
+  };
+
+  const handleTujuanChange = (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      tujuan: value,
+      tujuanCustom: value === "lainnya" ? prev.tujuanCustom : "",
+    }));
+    setSubmitted(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+
+    // In a real app, send formData to your backend here
+    console.log("Lab visitor form submitted:", formData);
+  };
+
+  return (
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-10">
+      <div className="max-w-5xl w-full grid gap-8 md:grid-cols-[1.1fr,0.9fr] items-stretch">
+        {/* Form Card */}
+        <div className="relative overflow-hidden rounded-3xl border border-[#F0F0F0] bg-white shadow-[0_18px_45px_rgba(15,134,87,0.08)] p-6 sm:p-8">
+          {/* Gamey background shapes */}
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-[32px] border-[10px] border-[#F7BF33]/40" />
+          <div className="pointer-events-none absolute -left-12 bottom-10 h-24 w-24 rounded-full border-[10px] border-[#3A6DC5]/20" />
+          <div className="pointer-events-none absolute right-6 bottom-6 grid grid-cols-3 gap-1 opacity-40">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <div
+                key={i}
+                className={`h-2 w-2 rounded-full ${
+                  i % 3 === 0
+                    ? "bg-[#F94141]"
+                    : i % 3 === 1
+                    ? "bg-[#3A6DC5]"
+                    : "bg-[#F7BF33]"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Header */}
+          <div className="relative flex items-start justify-between">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-white shadow-lg overflow-hidden">
+              <img
+                src={logo}
+                alt="Lab Logo"
+                className="h-full w-full object-contain p-1"
+              />
+            </div>
+          </div>
+          <div className="relative mb-20 flex items-start justify-center gap-4">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full bg-[#0F8657]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0F8657]">
+                MGM Lab Visitor
+                <span className="h-1 w-1 rounded-full bg-[#0F8657]" />
+              </p>
+              <h1 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#272727]">
+                Visitor Form
+              </h1>
+              <p className="mt-1 text-sm text-[#6B7280]">
+                Harap isi data dibawah untuk menggunakan lab MGM
+              </p>
+            </div>
+            {/* Minimal logo avatar inspired by provided logo */}
+            {/* Lab logo */}
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mb-6 rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-3">
+            <div className="flex items-center justify-between text-xs font-semibold text-[#6B7280]">
+              <span>Progress Pengisian</span>
+              <span>
+                {completedSteps}/{totalSteps} Quest
+              </span>
+            </div>
+            <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/80">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[#3A6DC5] via-[#F7BF33] to-[#F94141] transition-all duration-300"
+                style={{ width: `${Math.max(progress, 8)}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 relative z-20">
+            {/* Nama */}
+            <FieldCard
+              label="Nama"
+              quest="Quest 1"
+              description="Siapa nama lengkapmu?"
+            >
+              <input
+                type="text"
+                className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#3A6DC5] focus:ring-2 focus:ring-[#3A6DC5]/20"
+                placeholder="Tulis nama lengkapmu"
+                value={formData.nama}
+                onChange={handleChange("nama")}
+                required
+              />
+            </FieldCard>
+
+            {/* Instansi */}
+            <FieldCard
+              label="Instansi"
+              quest="Quest 2"
+              description="Dari mana asal instansi, kampus, atau perusahaanmu?"
+            >
+              <input
+                type="text"
+                className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#0F8657] focus:ring-2 focus:ring-[#0F8657]/18"
+                placeholder="Contoh: Universitas Brawijaya, PT Contoh, dll"
+                value={formData.instansi}
+                onChange={handleChange("instansi")}
+                required
+              />
+            </FieldCard>
+
+            {/* Kontak */}
+            <FieldCard
+              label="Kontak"
+              quest="Quest 3"
+              description="Bagaimana kami bisa menghubungimu kembali?"
+            >
+              <input
+                type="text"
+                className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#F7BF33] focus:ring-2 focus:ring-[#F7BF33]/30"
+                placeholder="Nomor HP atau email aktif"
+                value={formData.kontak}
+                onChange={handleChange("kontak")}
+                required
+              />
+            </FieldCard>
+
+            {/* PIC di Lab */}
+            <FieldCard
+              label="PIC di Lab"
+              quest="Quest 4"
+              description="Siapa orang lab yang menjadi penanggung jawab kunjunganmu?"
+            >
+              <input
+                type="text"
+                className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#F94141] focus:ring-2 focus:ring-[#F94141]/20"
+                placeholder="Nama PIC / dosen / peneliti di lab"
+                value={formData.picLab}
+                onChange={handleChange("picLab")}
+                required
+              />
+            </FieldCard>
+
+            {/* Tujuan */}
+            <FieldCard
+              label="Tujuan"
+              quest="Quest 5"
+              description="Apa misi utama kunjunganmu ke laboratorium hari ini?"
+            >
+              <div className="space-y-3">
+                <select
+                  className="w-full cursor-pointer rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#3A6DC5] focus:ring-2 focus:ring-[#3A6DC5]/20"
+                  value={formData.tujuan}
+                  onChange={handleTujuanChange}
+                  required
+                >
+                  <option value="" disabled>
+                    Pilih tujuan kunjungan
+                  </option>
+                  {TUJUAN_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+
+                {formData.tujuan === "lainnya" && (
+                  <input
+                    type="text"
+                    className="w-full rounded-2xl border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#3A6DC5] focus:bg-white focus:ring-2 focus:ring-[#3A6DC5]/20"
+                    placeholder="Tulis tujuan kunjunganmu yang lain"
+                    value={formData.tujuanCustom}
+                    onChange={handleChange("tujuanCustom")}
+                    required
+                  />
+                )}
+              </div>
+            </FieldCard>
+
+            {/* Submit */}
+            <div className="mt-5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-[#6B7280]">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#3A6DC5]/10 text-[11px] font-bold text-[#3A6DC5]">
+                  i
+                </span>
+                <span>
+                  Dengan mengisi form, kamu setuju dengan <a href="https://s.estella.id/privacy-policy-mgm" target="_blank">Privacy Policy</a> dan <a href="https://s.estella.id/sop-mgm" target="_blank">SOP</a> Lab MGM
+                </span>
+              </div>
+
+              <button
+                type="submit"
+                className="group inline-flex items-center gap-2 rounded-2xl bg-[#3A6DC5] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(58,109,197,0.55)] transition hover:translate-y-0.5 hover:bg-[#305aa1] focus:outline-none focus:ring-2 focus:ring-[#3A6DC5]/40"
+              >
+                <span>Submit &amp; Enter Lab</span>
+                <span className="relative flex h-5 w-5 items-center justify-center rounded-full bg-white/15 text-xs">
+                  <span className="translate-x-[1px]">▶</span>
+                </span>
+              </button>
+            </div>
+
+            {submitted && (
+              <div className="mt-4 flex items-center gap-3 rounded-2xl border border-[#0F8657]/20 bg-[#0F8657]/5 px-4 py-3 text-xs sm:text-sm text-[#065F46]">
+                <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#0F8657] text-white text-xs font-bold">
+                  ✓
+                </div>
+                <p>
+                  Data kunjungan berhasil direkam! Terima kasih sudah berkunjung ke
+                  laboratorium kami.
+                </p>
+              </div>
+            )}
+          </form>
+        </div>
+
+        {/* Right: Fun Game-like Side Panel */}
+        <div className="relative flex flex-col rounded-3xl bg-[#272727] p-6 sm:p-7 text-white overflow-hidden">
+          {/* Pattern blocks inspired by logo & pattern image */}
+          <div className="pointer-events-none absolute -right-8 -top-10 h-40 w-40 rotate-12 rounded-[32px] bg-[#F94141] opacity-60" />
+          <div className="pointer-events-none absolute -left-10 bottom-0 h-40 w-40 -rotate-6 bg-[#0F8657] opacity-60" />
+
+          <div className="relative z-10 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#F7BF33]">
+                Overview Form
+              </p>
+            </div>
+            <div className="flex flex-col items-end text-right">
+              <span className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-medium">
+                Level {completedSteps === totalSteps ? "MAX" : completedSteps + 1}
+              </span>
+              <span className="mt-1 text-[11px] text-white/60">
+                {completedSteps === totalSteps
+                  ? "All quests cleared!"
+                  : "Lengkapi semua quest."}
+              </span>
+            </div>
+          </div>
+
+          {/* XP Bar */}
+          <div className="relative z-10 mt-6 rounded-2xl bg-white/5 p-3">
+            <div className="flex items-center justify-between text-[11px] text-white/70">
+              <span>XP Meter</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+            <div className="mt-2 h-2.5 w-full rounded-full bg-black/40">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[#F7BF33] via-[#3A6DC5] to-[#F94141] transition-all duration-300"
+                style={{ width: `${Math.max(progress, 6)}%` }}
+              />
+            </div>
+            <div className="mt-2 flex items-center justify-between text-[10px] text-white/55">
+              <span>Isi semua data untuk full XP.</span>
+              <span>{completedSteps}/{totalSteps} quest selesai</span>
+            </div>
+          </div>
+
+          {/* Live preview of filled data */}
+          <div className="relative z-10 mt-6 grid gap-3 text-[11px] sm:text-xs">
+            <InfoPill
+              label="Nama"
+              value={formData.nama || "Belum diisi"}
+              color="blue"
+            />
+            <InfoPill
+              label="Instansi"
+              value={formData.instansi || "Belum diisi"}
+              color="green"
+            />
+            <InfoPill
+              label="Kontak Aktif"
+              value={formData.kontak || "Belum diisi"}
+              color="yellow"
+            />
+            <InfoPill
+              label="PIC di Lab"
+              value={formData.picLab || "Belum diisi"}
+              color="red"
+            />
+            <InfoPill
+              label="Misi Kunjungan"
+              value={
+                formData.tujuan === "lainnya"
+                  ? formData.tujuanCustom || "Belum diisi"
+                  : TUJUAN_OPTIONS.find((t) => t.value === formData.tujuan)?.label ||
+                    "Belum diisi"
+              }
+              color="blue"
+            />
+          </div>
+
+          {/* Bottom playful shapes */}
+          <div className="relative z-10 mt-6 flex flex-wrap gap-2 text-[9px] text-white/55">
+            <Badge color="#3A6DC5">Media</Badge>
+            <Badge color="#F7BF33">Game</Badge>
+            <Badge color="#0F8657">Mobile</Badge>
+            <Badge color="#F94141">Laboratory</Badge>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FieldCard({ label, quest, description, children }) {
+  return (
+    <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB]/60 p-4 sm:p-5 hover:border-[#3A6DC5]/40 hover:bg-white transition">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#3A6DC5]/10 text-[11px] font-semibold text-[#3A6DC5]">
+            {quest.split(" ")[1]}
+          </span>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9CA3AF]">
+              {quest}
+            </p>
+            <p className="-mt-0.5 text-sm font-semibold text-[#272727]">{label}</p>
+          </div>
+        </div>
+      </div>
+      <p className="mb-3 text-xs text-[#6B7280]">{description}</p>
+      {children}
+    </div>
+  );
+}
+
+function InfoPill({ label, value, color }) {
+  const colorMap = {
+    blue: "bg-[#3A6DC5]/20 text-[#BFCEEE] border-[#3A6DC5]/40",
+    green: "bg-[#0F8657]/20 text-[#C4E7D7] border-[#0F8657]/40",
+    yellow: "bg-[#F7BF33]/15 text-[#FDE9B5] border-[#F7BF33]/40",
+    red: "bg-[#F94141]/20 text-[#FECACA] border-[#FCA5A5]/60",
+  };
+
+  return (
+    <div className={`flex items-center justify-between rounded-2xl border px-3 py-2 ${colorMap[color] || colorMap.blue}`}>
+      <span className="text-[10px] uppercase tracking-[0.16em] text-white/70">
+        {label}
+      </span>
+      <span className="max-w-[55%] truncate text-[11px] font-medium">
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function Badge({ children, color }) {
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-2.5 py-1"
+      style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.06)", color }}
+    >
+      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
+      <span className="font-medium">{children}</span>
+    </span>
+  );
+}
+
