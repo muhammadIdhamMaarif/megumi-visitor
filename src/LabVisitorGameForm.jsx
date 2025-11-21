@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import logo from "./assets/logo.png"
+import React, { useMemo, useState } from "react";
+import logo from "./assets/logo.png";
 
 const TUJUAN_OPTIONS = [
   { value: "kunjungan-lab", label: "Kunjungan Laboratorium" },
@@ -132,7 +132,10 @@ export default function LabVisitorGameForm() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 relative z-20">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 sm:space-y-5 relative z-20"
+          >
             {/* Nama */}
             <FieldCard
               label="Nama"
@@ -240,7 +243,17 @@ export default function LabVisitorGameForm() {
                   i
                 </span>
                 <span>
-                  Dengan mengisi form, kamu setuju dengan <a href="https://s.estella.id/privacy-policy-mgm" target="_blank">Privacy Policy</a> dan <a href="https://s.estella.id/sop-mgm" target="_blank">SOP</a> Lab MGM
+                  Dengan mengisi form, kamu setuju dengan{" "}
+                  <a
+                    href="https://s.estella.id/privacy-policy-mgm"
+                    target="_blank"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  dan{" "}
+                  <a href="https://s.estella.id/sop-mgm" target="_blank">SOP</a>
+                  {" "}
+                  Lab MGM
                 </span>
               </div>
 
@@ -261,8 +274,8 @@ export default function LabVisitorGameForm() {
                   ✓
                 </div>
                 <p>
-                  Data kunjungan berhasil direkam! Terima kasih sudah berkunjung ke
-                  laboratorium kami.
+                  Data kunjungan berhasil direkam! Terima kasih sudah berkunjung
+                  ke laboratorium kami.
                 </p>
               </div>
             )}
@@ -283,7 +296,8 @@ export default function LabVisitorGameForm() {
             </div>
             <div className="flex flex-col items-end text-right">
               <span className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-medium">
-                Level {completedSteps === totalSteps ? "MAX" : completedSteps + 1}
+                Level{" "}
+                {completedSteps === totalSteps ? "MAX" : completedSteps + 1}
               </span>
               <span className="mt-1 text-[11px] text-white/60">
                 {completedSteps === totalSteps
@@ -335,12 +349,11 @@ export default function LabVisitorGameForm() {
             />
             <InfoPill
               label="Misi Kunjungan"
-              value={
-                formData.tujuan === "lainnya"
-                  ? formData.tujuanCustom || "Belum diisi"
-                  : TUJUAN_OPTIONS.find((t) => t.value === formData.tujuan)?.label ||
-                    "Belum diisi"
-              }
+              value={formData.tujuan === "lainnya"
+                ? formData.tujuanCustom || "Belum diisi"
+                : TUJUAN_OPTIONS.find((t) => t.value === formData.tujuan)
+                  ?.label ||
+                  "Belum diisi"}
               color="blue"
             />
           </div>
@@ -370,7 +383,9 @@ function FieldCard({ label, quest, description, children }) {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9CA3AF]">
               {quest}
             </p>
-            <p className="-mt-0.5 text-sm font-semibold text-[#272727]">{label}</p>
+            <p className="-mt-0.5 text-sm font-semibold text-[#272727]">
+              {label}
+            </p>
           </div>
         </div>
       </div>
@@ -389,7 +404,11 @@ function InfoPill({ label, value, color }) {
   };
 
   return (
-    <div className={`flex items-center justify-between rounded-2xl border px-3 py-2 ${colorMap[color] || colorMap.blue}`}>
+    <div
+      className={`flex items-center justify-between rounded-2xl border px-3 py-2 ${
+        colorMap[color] || colorMap.blue
+      }`}
+    >
       <span className="text-[10px] uppercase tracking-[0.16em] text-white/70">
         {label}
       </span>
@@ -406,9 +425,11 @@ function Badge({ children, color }) {
       className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-2.5 py-1"
       style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.06)", color }}
     >
-      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
+      <span
+        className="h-1.5 w-1.5 rounded-full"
+        style={{ backgroundColor: color }}
+      />
       <span className="font-medium">{children}</span>
     </span>
   );
 }
-
