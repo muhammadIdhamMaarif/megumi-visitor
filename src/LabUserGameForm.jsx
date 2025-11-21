@@ -11,14 +11,11 @@ const TUJUAN_OPTIONS = [
   { value: "lainnya", label: "Lainnya (Other)" },
 ];
 
-export default function LabVisitorGameForm() {
+export default function LabUserGameForm() {
   const [formData, setFormData] = useState({
     nama: "",
-    instansi: "",
+    nim: "",
     kontak: "",
-    picLab: "",
-    tujuan: "",
-    tujuanCustom: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -26,20 +23,13 @@ export default function LabVisitorGameForm() {
   const completedSteps = useMemo(() => {
     let count = 0;
     if (formData.nama.trim()) count++;
-    if (formData.instansi.trim()) count++;
+    if (formData.nim.trim()) count++;
     if (formData.kontak.trim()) count++;
-    if (formData.picLab.trim()) count++;
-
-    if (formData.tujuan === "lainnya") {
-      if (formData.tujuanCustom.trim()) count++;
-    } else if (formData.tujuan) {
-      count++;
-    }
 
     return count;
   }, [formData]);
 
-  const totalSteps = 5;
+  const totalSteps = 3;
   const progress = (completedSteps / totalSteps) * 100;
 
   const handleChange = (field) => (e) => {
@@ -106,11 +96,11 @@ export default function LabVisitorGameForm() {
           <div className="relative mb-20 flex items-start justify-center gap-4">
             <div>
               <p className="inline-flex items-center gap-2 rounded-full bg-[#0F8657]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0F8657]">
-                Pengunjung MGM Lab
+                Pengguna MGM Lab
                 <span className="h-1 w-1 rounded-full bg-[#0F8657]" />
               </p>
               <h1 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#272727]">
-                Visitor Form
+                User Form
               </h1>
               <p className="mt-1 text-sm text-[#6B7280]">
                 Harap isi data dibawah untuk menggunakan lab MGM
@@ -159,16 +149,16 @@ export default function LabVisitorGameForm() {
 
             {/* Instansi */}
             <FieldCard
-              label="Instansi"
+              label="NIM / NIP / NIDN"
               quest="Quest 2"
-              description="Dari mana asal instansi, kampus, atau perusahaanmu?"
+              description="Masukkan NIM jika Mahasiswa, dan NIP / NIDN bila dosen"
             >
               <input
                 type="text"
                 className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#0F8657] focus:ring-2 focus:ring-[#0F8657]/18"
-                placeholder="Contoh: Universitas Brawijaya, PT Contoh, dll"
+                placeholder="Contoh: 245150XXXXXXXXX"
                 value={formData.instansi}
-                onChange={handleChange("instansi")}
+                onChange={handleChange("nim")}
                 required
               />
             </FieldCard>
@@ -187,58 +177,6 @@ export default function LabVisitorGameForm() {
                 onChange={handleChange("kontak")}
                 required
               />
-            </FieldCard>
-
-            {/* PIC di Lab */}
-            <FieldCard
-              label="PIC di Lab"
-              quest="Quest 4"
-              description="Siapa orang lab yang menjadi penanggung jawab kunjunganmu?"
-            >
-              <input
-                type="text"
-                className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#F94141] focus:ring-2 focus:ring-[#F94141]/20"
-                placeholder="Nama PIC / dosen / peneliti di lab"
-                value={formData.picLab}
-                onChange={handleChange("picLab")}
-                required
-              />
-            </FieldCard>
-
-            {/* Tujuan */}
-            <FieldCard
-              label="Tujuan"
-              quest="Quest 5"
-              description="Apa misi utama kunjunganmu ke laboratorium hari ini?"
-            >
-              <div className="space-y-3">
-                <select
-                  className="w-full cursor-pointer rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#3A6DC5] focus:ring-2 focus:ring-[#3A6DC5]/20"
-                  value={formData.tujuan}
-                  onChange={handleTujuanChange}
-                  required
-                >
-                  <option value="" disabled>
-                    Pilih tujuan kunjungan
-                  </option>
-                  {TUJUAN_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-
-                {formData.tujuan === "lainnya" && (
-                  <input
-                    type="text"
-                    className="w-full rounded-2xl border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#3A6DC5] focus:bg-white focus:ring-2 focus:ring-[#3A6DC5]/20"
-                    placeholder="Tulis tujuan kunjunganmu yang lain"
-                    value={formData.tujuanCustom}
-                    onChange={handleChange("tujuanCustom")}
-                    required
-                  />
-                )}
-              </div>
             </FieldCard>
 
             {/* Submit */}
@@ -338,7 +276,7 @@ export default function LabVisitorGameForm() {
               color="blue"
             />
             <InfoPill
-              label="Instansi"
+              label="NIM / NIP / NIDN"
               value={formData.instansi || "Belum diisi"}
               color="green"
             />
@@ -346,20 +284,6 @@ export default function LabVisitorGameForm() {
               label="Kontak Aktif"
               value={formData.kontak || "Belum diisi"}
               color="yellow"
-            />
-            <InfoPill
-              label="PIC di Lab"
-              value={formData.picLab || "Belum diisi"}
-              color="red"
-            />
-            <InfoPill
-              label="Misi Kunjungan"
-              value={formData.tujuan === "lainnya"
-                ? formData.tujuanCustom || "Belum diisi"
-                : TUJUAN_OPTIONS.find((t) => t.value === formData.tujuan)
-                  ?.label ||
-                  "Belum diisi"}
-              color="blue"
             />
           </div>
 
