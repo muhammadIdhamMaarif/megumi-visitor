@@ -55,12 +55,37 @@ export default function LabManagerGameForm({
     setSubmitted(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
+  const API_BASE_URL = "https://mgm.estella.id";
 
-    // In a real app, send formData to your backend here
-    console.log("Lab visitor form submitted:", formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitted(false);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/manager-form`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nama: formData.nama,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      setSubmitted(true);
+
+      // reset form setelah sukses
+      setFormData({
+        nama: "",
+      });
+    } catch (err) {
+      console.error("Error submitting manager form:", err);
+      alert("Gagal menyimpan data manager. Coba beberapa saat lagi.");
+    }
   };
 
   if (submitted) {

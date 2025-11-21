@@ -58,12 +58,49 @@ export default function LabVisitorGameForm() {
     setSubmitted(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
+  const API_BASE_URL = "https://mgm.estella.id";
 
-    // In a real app, send formData to your backend here
-    console.log("Lab visitor form submitted:", formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitted(false);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/visitor-form`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nama: formData.nama,
+          instansi: formData.instansi,
+          kontak: formData.kontak,
+          pic_lab: formData.picLab, // mapping ke backend
+          tujuan: formData.tujuan,
+          tujuan_custom: formData.tujuan === "lainnya"
+            ? formData.tujuanCustom
+            : "",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      setSubmitted(true);
+
+      // Reset form setelah sukses
+      setFormData({
+        nama: "",
+        instansi: "",
+        kontak: "",
+        picLab: "",
+        tujuan: "",
+        tujuanCustom: "",
+      });
+    } catch (err) {
+      console.error("Error submitting lab visitor form:", err);
+      alert("Gagal menyimpan data kunjungan. Coba beberapa saat lagi.");
+    }
   };
 
   if (submitted) {

@@ -48,12 +48,41 @@ export default function LabUserGameForm() {
     setSubmitted(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
+  const API_BASE_URL = "https://mgm.estella.id";
 
-    // In a real app, send formData to your backend here
-    console.log("Lab visitor form submitted:", formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitted(false);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/user-form`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nama: formData.nama,
+          nim: formData.nim,
+          kontak: formData.kontak,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      setSubmitted(true);
+
+      // reset form setelah sukses
+      setFormData({
+        nama: "",
+        nim: "",
+        kontak: "",
+      });
+    } catch (err) {
+      console.error("Error submitting lab user form:", err);
+      alert("Gagal menyimpan data pengguna. Coba beberapa saat lagi.");
+    }
   };
 
   if (submitted) {
@@ -157,7 +186,7 @@ export default function LabUserGameForm() {
                 type="text"
                 className="w-full rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-sm text-[#272727] outline-none transition focus:border-[#0F8657] focus:ring-2 focus:ring-[#0F8657]/18"
                 placeholder="Contoh: 245150XXXXXXXXX"
-                value={formData.instansi}
+                value={formData.nim}
                 onChange={handleChange("nim")}
                 required
               />
@@ -277,7 +306,7 @@ export default function LabUserGameForm() {
             />
             <InfoPill
               label="NIM / NIP / NIDN"
-              value={formData.instansi || "Belum diisi"}
+              value={formData.nim || "Belum diisi"}
               color="green"
             />
             <InfoPill
