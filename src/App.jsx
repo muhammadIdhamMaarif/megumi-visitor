@@ -54,7 +54,7 @@ function IntroScreen() {
           <span className="logo-g">G</span>
           <span className="logo-3">M</span>
         </div>
-        <p className="intro-title">Selamat Datang di Lab Game</p>
+        <p className="intro-title">Selamat Datang di Lab MGM</p>
         <p className="intro-subtitle">Loading Page.</p>
       </div>
 
@@ -76,7 +76,7 @@ function RoleSelectScreen({ onSelectRole }) {
             <span className="logo-g">G</span>
             <span className="logo-3">M</span>
           </div>
-          <span className="select-tag">Lab Game</span>
+          <span className="select-tag">Lab MGM</span>
         </div>
         <h1 className="select-title">Pilih Peranmu di Lab</h1>
         <p className="select-subtitle">
