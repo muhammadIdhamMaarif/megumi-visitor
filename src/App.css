@@ -31,8 +31,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0%;
-  background: radial-gradient(circle at top left, #fcefef 0, transparent 55%),
-    radial-gradient(circle at bottom right, #eef3ff 0, transparent 55%);
+  background: color-white;
 }
 
 /* INTRO SCREEN */
