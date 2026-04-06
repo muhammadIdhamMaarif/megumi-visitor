@@ -280,13 +280,13 @@ export default function LabManagerGameForm({
                 <span>
                   Dengan mengisi form, kamu setuju dengan{" "}
                   <a
-                    href="https://s.estella.id/privacy-policy-mgm"
+                    href="https://s.labmgm.org/privacy-policy-mgm"
                     target="_blank"
                   >
                     Privacy Policy
                   </a>{" "}
                   dan{" "}
-                  <a href="https://s.estella.id/sop-mgm" target="_blank">
+                  <a href="https://s.labmgm.org/sop-mgm" target="_blank">
                     SOP
                   </a>{" "}
                   Lab MGM
