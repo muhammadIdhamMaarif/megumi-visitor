@@ -48,7 +48,7 @@ export default function LabUserGameForm() {
     setSubmitted(false);
   };
 
-  const API_BASE_URL = "https://mgm.estella.id";
+  const API_BASE_URL = "https://kiosk.labmgm.org";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -217,13 +217,13 @@ export default function LabUserGameForm() {
                 <span>
                   Dengan mengisi form, kamu setuju dengan{" "}
                   <a
-                    href="https://s.estella.id/privacy-policy-mgm"
+                    href="https://s.labmgm.org/privacy-policy-mgm"
                     target="_blank"
                   >
                     Privacy Policy
                   </a>{" "}
                   dan{" "}
-                  <a href="https://s.estella.id/sop-mgm" target="_blank">SOP</a>
+                  <a href="https://s.labmgm.org/sop-mgm" target="_blank">SOP</a>
                   {" "}
                   Lab MGM
                 </span>
